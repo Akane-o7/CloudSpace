@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudSpace - Workspace</title>
+    
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="js/app.js" defer></script>
+</head>
+<body>
+
+    <div id="view-landing" class="landing-wrapper">
+        <div class="landing-hero-content">
+            <div class="hero-text-container">
+                <h1 class="hero-title">CloudSpace</h1>
+                <p class="hero-subtitle">Tu espacio personal de trabajo en la nube. Almacena, organiza y accede a tus archivos desde cualquier lugar con total seguridad.</p>
+                <div class="landing-actions">
+                    <button id="btn-landing-login" class="btn-primary">Iniciar Sesión</button>
+                    <button id="btn-landing-register" class="btn-base">Crear Cuenta nueva</button>
+                </div>
+            </div>
+            <div class="hero-illustration-container">
+                <img src="img/nube.svg" alt="Almacenamiento en la nube" class="hero-illustration">
+            </div>
+        </div>
+    </div>
+
+    <div id="view-login" class="login-wrapper hidden">
+        <div class="login-card">
+            <h1>CloudSpace</h1>
+            <p>Accede a tu espacio</p>
+            <form id="loginForm">
+               <div class="form-group">
+                    <input type="email" id="loginEmail" class="input-base" placeholder="Correo electrónico" required>
+               </div>
+               <div class="form-group">
+                    <input type="password" id="loginPassword" class="input-base" placeholder="Contraseña" required>
+               </div>
+                <button type="submit" class="btn-primary btn-login">Iniciar Sesión</button>
+            </form>
+            
+            <div class="auth-feedback-wrapper">
+                <span id="resultado-login" class="text-danger text-small"></span>
+            </div>
+            
+            <div class="text-center mt-large">
+                <span class="text-small">¿No tienes cuenta? <a href="#" id="link-to-register" class="enlace-texto">Regístrate aquí</a></span>
+            </div>
+            
+            <div class="text-center mt-small">
+                <a href="#" id="btn-login-back" class="enlace-texto text-small">← Volver a la página principal</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="view-register" class="login-wrapper hidden">
+        <div class="login-card">
+            <h1>CloudSpace</h1>
+            <p>Crea tu nueva cuenta</p>
+            <form id="registerForm">
+               <div class="form-group">
+                    <input type="email" id="registerEmail" class="input-base" placeholder="Correo electrónico" required>
+               </div>
+               <div class="form-group">
+                    <input type="password" id="registerPassword" class="input-base" placeholder="Contraseña" required>
+               </div>
+               <div class="form-group">
+                    <input type="password" id="registerPasswordConfirm" class="input-base" placeholder="Confirmar contraseña" required>
+               </div>
+                <button type="submit" class="btn-primary btn-login">Registrarse</button>
+            </form>
+            
+            <div class="auth-feedback-wrapper">
+                <span id="resultado-registro" class="text-danger text-small"></span>
+            </div>
+            
+            <div class="text-center mt-large">
+                <span class="text-small">¿Ya tienes cuenta? <a href="#" id="link-to-login" class="enlace-texto">Inicia sesión</a></span>
+            </div>
+            
+            <div class="text-center mt-small">
+                <a href="#" id="btn-register-back" class="enlace-texto text-small">← Volver a la página principal</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="view-app" class="app-layout hidden">
+        
+        <aside class="sidebar">
+            <div class="sidebar-logo">CloudSpace</div>
+            <button class="btn-primary btn-new" id="btn-nuevo">
+                <i data-feather="plus"></i> Nuevo
+            </button>
+            
+            <nav>
+                <ul class="nav-menu">
+                    <li>
+                        <a href="#" class="nav-item active" data-target="view-inicio">
+                            <i data-feather="home"></i> Inicio
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="storage-widget" id="widget-almacenamiento">
+                <div class="storage-label">Almacenamiento</div>
+                <div class="progress-bar"><div class="progress-fill" id="sidebar-bar-total" style="width: 0%;"></div></div>
+                <div class="storage-stats" id="sidebar-text-total">0 MB de 150 MB</div>
+            </div>
+        </aside>
+
+        <div class="content-wrapper">
+            
+            <header class="topbar">
+                <div class="search-bar">
+                    <input type="search" id="input-search" class="input-base" placeholder="Buscar archivos...">
+                    <div id="search-results" class="dropdown-acciones search-dropdown hidden"></div>
+                </div>
+        
+                <div class="avatar-container">
+                    <button class="avatar-btn" id="btn-avatar-user">--</button>
+                    
+                    <div id="dropdown-perfil" class="dropdown-acciones avatar-dropdown hidden">
+                        <button class="nav-item-dropdown" data-target="view-perfil">
+                            <i data-feather="user"></i> Mi Perfil
+                        </button>
+                        <div class="dropdown-divider"></div>
+                        <button id="btn-logout" class="nav-item-dropdown btn-logout">
+                            <i data-feather="log-out"></i> Cerrar sesión
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <main class="main-canvas">
+                
+                <div id="view-inicio" class="app-view-section">
+                    <h2 class="section-title">Acciones Rápidas</h2>
+                    
+                    <input type="file" id="input-imagen" accept="image/*" capture="environment" class="hidden" multiple>
+                    <input type="file" id="input-audio" accept="audio/*" class="hidden" multiple>
+
+                    <div class="grid-actions">
+                        <div class="action-card" id="btn-nota">
+                            <i data-feather="file-text" class="action-icon"></i><span>Nota de texto</span>
+                        </div>
+                        <div class="action-card" id="btn-audio-action">
+                            <i data-feather="mic" class="action-icon"></i><span>Grabar Audio</span>
+                        </div>
+                        <div class="action-card" id="btn-camara">
+                            <i data-feather="camera" class="action-icon"></i><span>Cámara</span>
+                        </div>
+                        <div class="action-card" id="btn-archivo">
+                            <i data-feather="upload" class="action-icon"></i><span>Subir Archivo</span>
+                        </div>
+                    </div>
+                    
+                    <div id="resultado-upload" class="upload-feedback"></div>
+
+                    <div class="mt-large">
+                        <h3 class="section-subtitle">Sugeridos recientemente</h3>
+                        <div id="grid-recientes" class="grid-actions"></div>
+                    </div>
+
+                    <div class="mt-large">
+                        <div class="section-header">
+                            <h3 class="section-subtitle title-no-margin">Mi Unidad</h3>
+                            <button id="btn-eliminar-archivos" class="btn-primary btn-danger-bg btn-small hidden">
+                                <i data-feather="trash-2"></i> Eliminar Selección
+                            </button>
+                        </div>
+                        
+                        <div class="data-table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th class="th-checkbox"></th> 
+                                        <th>Nombre</th>
+                                        <th>Fecha</th>
+                                        <th>Tamaño</th>
+                                        <th class="th-actions"></th> 
+                                    </tr>
+                                </thead>
+                                <tbody id="lista-archivos"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="view-perfil" class="app-view-section hidden">
+                    <div class="settings-card profile-card">
+                        <h2 class="section-title">Perfil</h2>
+                        
+                        <div class="profile-header">
+                            <div class="avatar-large" id="perfil-avatar-large">--</div>
+                            <div class="profile-info">
+                                <div class="input-group">
+                                    <label class="text-small input-group-label">Nombre completo</label>
+                                    <input type="text" id="perfil-nombre" class="input-base input-readonly" readonly>
+                                </div>
+                                <div class="input-group">
+                                    <label class="text-small input-group-label">Correo electrónico</label>
+                                    <input type="email" id="perfil-email" class="input-base input-readonly" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3 class="storage-section-title">Seguridad</h3>
+                        <div class="input-group">
+                            <label class="text-small input-group-label">Contraseña actual</label>
+                            <input type="password" id="perfil-pass-actual" class="input-base" placeholder="Introduce tu contraseña actual">
+                        </div>
+                        <div class="input-group">
+                            <label class="text-small input-group-label">Nueva contraseña</label>
+                            <input type="password" id="perfil-pass-nueva" class="input-base" placeholder="Introduce la nueva contraseña">
+                        </div>
+                        <div class="input-group">
+                            <label class="text-small input-group-label">Confirmar nueva contraseña</label>
+                            <input type="password" id="perfil-pass-confirmar" class="input-base" placeholder="Repite la nueva contraseña">
+                        </div>
+                        <button id="btn-cambiar-pass" class="btn-primary">Actualizar Contraseña</button>
+                        <div id="resultado-pass" class="upload-feedback mb-large"></div>
+                        
+                       <h3 class="storage-section-title">Almacenamiento</h3>
+                        
+                        <div class="storage-item">
+                            <div class="storage-item-header">
+                                <span class="text-small storage-item-label">Documentos</span>
+                                <span class="text-small" id="text-docs">0 MB</span>
+                            </div>
+                            <div class="progress-bar"><div class="progress-fill" id="bar-docs" style="width: 0%;"></div></div>
+                        </div>
+                        
+                        <div class="storage-item">
+                            <div class="storage-item-header">
+                                <span class="text-small storage-item-label">Imágenes</span>
+                                <span class="text-small" id="text-imgs">0 MB</span>
+                            </div>
+                            <div class="progress-bar"><div class="progress-fill bg-purple" id="bar-imgs" style="width: 0%;"></div></div>
+                        </div>
+                        
+                        <div class="storage-item storage-item-last">
+                            <div class="storage-item-header">
+                                <span class="text-small storage-item-label">Otros</span>
+                                <span class="text-small" id="text-otros">0 MB</span>
+                            </div>
+                            <div class="progress-bar"><div class="progress-fill bg-gray" id="bar-otros" style="width: 0%;"></div></div>
+                        </div>
+                        
+                        <div class="text-small text-muted" id="text-total-usage">Total utilizado: 0 MB de 150 MB</div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <div id="view-admin" class="app-layout hidden">
+        
+        <aside class="sidebar">
+            <div class="sidebar-logo">CloudSpace <span class="badge badge-success ml-small">ADMIN</span></div>
+            <nav>
+                <ul class="nav-menu">
+                    <li>
+                        <a href="#" class="nav-item active" data-admin-target="admin-inicio">
+                            <i data-feather="grid"></i> Panel de Control
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <div class="content-wrapper">
+            
+            <header class="topbar">
+                <div class="search-bar">
+                    <input type="search" id="admin-search" class="input-base" placeholder="Buscar usuarios por correo...">
+                </div>
+                <div class="avatar-container">
+                    <button class="avatar-btn btn-danger-bg" id="btn-admin-logout" title="Cerrar Sesión"><i data-feather="log-out"></i></button>
+                </div>
+            </header>
+
+            <main class="main-canvas">
+                
+                <div id="admin-inicio" class="admin-section">
+                    
+                    <h2 class="section-title">Resumen del Sistema</h2>
+                    <div class="metric-grid">
+                        <div class="metric-card">
+                            <p class="text-small">Usuarios Activos</p>
+                            <h2 id="admin-metric-activos">0</h2>
+                        </div>
+                        <div class="metric-card">
+                            <p class="text-small">Cuentas Pendientes</p>
+                            <h2 id="admin-metric-pendientes">0</h2>
+                        </div>
+                        <div class="metric-card">
+                            <p class="text-small">Almacenamiento Global (Límite 600 MB)</p>
+                            <h2 id="admin-metric-storage">0 MB / 600 MB</h2>
+                            <div class="progress-bar mt-small">
+                                <div class="progress-fill" id="admin-bar-storage" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-large">
+                        <div class="section-header">
+                            <h3 class="section-subtitle title-no-margin">Directorio de Cuentas</h3>
+                            <div class="action-group">
+                                <button id="btn-admin-aprobar" class="btn-primary btn-success-bg btn-small hidden">
+                                    <i data-feather="check-circle"></i> Aprobar Selección
+                                </button>
+                                <button id="btn-admin-eliminar" class="btn-primary btn-danger-bg btn-small hidden">
+                                    <i data-feather="trash-2"></i> Eliminar Selección
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="data-table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th class="th-checkbox"><input type="checkbox" id="admin-check-all"></th>
+                                        <th>Correo Electrónico</th>
+                                        <th>Estado</th>
+                                        <th>Espacio Usado</th>
+                                        <th class="th-actions">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="lista-usuarios-admin">
+                                    </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <div id="modal-almacenamiento" class="modal-overlay hidden">
+        <div class="modal-content modal-nota-container">
+            <div class="modal-header">
+                <h3 class="modal-title">Distribución del Almacenamiento</h3>
+                <button class="btn-close-modal" id="btn-cerrar-almacenamiento"><i data-feather="x"></i></button>
+            </div>
+            <div class="nota-editor" style="min-height: auto; padding: 2rem;">
+                <div class="storage-item">
+                    <div class="storage-item-header">
+                        <span class="text-small storage-item-label">Documentos</span>
+                        <span class="text-small" id="modal-text-docs">0 MB</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill" id="modal-bar-docs" style="width: 0%;"></div></div>
+                </div>
+                
+                <div class="storage-item">
+                    <div class="storage-item-header">
+                        <span class="text-small storage-item-label">Imágenes</span>
+                        <span class="text-small" id="modal-text-imgs">0 MB</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill bg-purple" id="modal-bar-imgs" style="width: 0%;"></div></div>
+                </div>
+                
+                <div class="storage-item storage-item-last">
+                    <div class="storage-item-header">
+                        <span class="text-small storage-item-label">Otros</span>
+                        <span class="text-small" id="modal-text-otros">0 MB</span>
+                    </div>
+                    <div class="progress-bar"><div class="progress-fill bg-gray" id="bar-otros" style="width: 0%;"></div></div>
+                </div>
+                
+                <div class="text-small text-muted text-center" id="modal-text-total-usage">Total utilizado: 0 MB de 150 MB</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-nota" class="modal-overlay hidden">
+        <div class="modal-content modal-nota-container">
+            <div class="modal-header">
+                <input type="text" id="nota-titulo" class="nota-titulo-input" placeholder="Título de la nota">
+                <button class="btn-close-modal" id="btn-cerrar-nota"><i data-feather="x"></i></button>
+            </div>
+            <div class="nota-toolbar">
+                <button type="button" class="tool-btn" onclick="formatearTexto('bold')"><i data-feather="bold"></i></button>
+                <button type="button" class="tool-btn" onclick="formatearTexto('italic')"><i data-feather="italic"></i></button>
+                <button type="button" class="tool-btn" onclick="formatearTexto('insertUnorderedList')"><i data-feather="list"></i></button>
+                <button type="button" class="tool-btn" onclick="insertarEnlace()"><i data-feather="link"></i></button>
+            </div>
+            <div id="nota-contenido" class="nota-editor" contenteditable="true" data-placeholder="Escribe tu nota aquí..."></div>
+            
+            <div class="modal-footer-left">
+                <button class="btn-primary" id="btn-guardar-nota">Guardar Nota</button>
+                <button class="btn-base ml-small hidden" id="btn-descargar-nota" type="button">
+                    <i data-feather="download" class="icon-small"></i> 
+                    <span class="ml-small">Descargar</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-delete-file" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-icon-danger">
+                <i data-feather="alert-triangle"></i>
+            </div>
+            <h2>Eliminar Archivo(s)</h2>
+            <p class="text-small" id="texto-delete-file">¿Seguro que deseas eliminar los archivos seleccionados?</p>
+            <div class="modal-actions">
+                <button class="btn-base" id="btn-cancel-delete-file">Cancelar</button>
+                <button class="btn-primary btn-danger-bg" id="btn-confirm-delete-file">Eliminar permanentemente</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-delete" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-icon-danger">
+                <i data-feather="alert-triangle"></i>
+            </div>
+            <h2>Eliminar Usuario</h2>
+            <p class="text-small">¿Seguro que deseas eliminar el usuario? Se borrarán sus datos permanentemente.</p>
+            <div class="modal-actions">
+                <button class="btn-base" id="btn-cancel-delete">Cancelar</button>
+                <button class="btn-primary btn-danger-bg" id="btn-confirm-delete">Eliminar permanentemente</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-email" class="modal-overlay hidden">
+         <div class="modal-content modal-nota-container">
+             <div class="modal-header">
+                 <h3 class="modal-title">Nuevo Mensaje</h3>
+                 <button class="btn-close-modal" id="btn-cerrar-email"><i data-feather="x"></i></button>
+             </div>
+             <div class="email-headers">
+                 <input type="email" id="email-para" class="email-input-row" placeholder="Para: usuario@ejemplo.com">
+                 <input type="text" id="email-asunto" class="email-input-row" placeholder="Asunto">
+             </div>
+             <div class="nota-toolbar">
+                 <button type="button" class="tool-btn" onclick="formatearCorreo('bold')"><i data-feather="bold"></i></button>
+                 <button type="button" class="tool-btn" onclick="formatearCorreo('italic')"><i data-feather="italic"></i></button>
+                 <button type="button" class="tool-btn" onclick="formatearCorreo('insertUnorderedList')"><i data-feather="list"></i></button>
+             </div>
+             <div id="email-contenido" class="nota-editor" contenteditable="true" data-placeholder="Escribe tu mensaje aquí..."></div>
+             <div class="modal-footer-left">
+                 <button class="btn-primary" id="btn-enviar-email">
+                     <i data-feather="send" class="icon-small"></i> 
+                     <span class="ml-small">Enviar</span>
+                 </button>
+             </div>
+         </div>
+     </div>
+
+</body>
+</html>
