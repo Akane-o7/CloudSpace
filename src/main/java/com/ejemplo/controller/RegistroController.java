@@ -4,10 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import com.ejemplo.model.ConexionBD;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -20,9 +20,6 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet("/api/registro")
 public class RegistroController extends HttpServlet {
 
-    private static final String DB_URL = "jdbc:mysql://mysql:3306/bd1";
-    private static final String DB_USER = "root";
-    private static final String DB_PASS = "root";
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -46,7 +43,7 @@ public class RegistroController extends HttpServlet {
             String password = jsonObject.get("password").getAsString();
 
             Class.forName("com.mysql.cj.jdbc.Driver");
-            try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
+            try (Connection conn = ConexionBD.getConnection()) {
                 
                 // 1. Comprobar si el correo ya existe
                 String sqlCheck = "SELECT id FROM usuarios WHERE correo = ?";

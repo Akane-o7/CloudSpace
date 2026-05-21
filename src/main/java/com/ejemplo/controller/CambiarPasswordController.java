@@ -4,9 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+
+import com.ejemplo.model.ConexionBD;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -20,9 +21,6 @@ import jakarta.servlet.http.HttpSession;
 public class CambiarPasswordController extends HttpServlet {
 
     // Usamos los datos exactos de tu docker-compose.yml
-    private static final String DB_URL = "jdbc:mysql://mysql:3306/bd1";
-    private static final String DB_USER = "root";
-    private static final String DB_PASS = "root";
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -63,7 +61,7 @@ public class CambiarPasswordController extends HttpServlet {
         // 4. Lógica de Base de Datos
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
+            try (Connection conn = ConexionBD.getConnection()) {
 
                 // A) Verificar que la contraseña actual es la correcta en la base de datos
                 String sqlCheck = "SELECT password FROM usuarios WHERE correo = ?";
