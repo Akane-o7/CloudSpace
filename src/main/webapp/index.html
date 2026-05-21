@@ -443,6 +443,11 @@
                  <button type="button" class="tool-btn" onclick="formatearCorreo('bold')"><i data-feather="bold"></i></button>
                  <button type="button" class="tool-btn" onclick="formatearCorreo('italic')"><i data-feather="italic"></i></button>
                  <button type="button" class="tool-btn" onclick="formatearCorreo('insertUnorderedList')"><i data-feather="list"></i></button>
+                 
+                 <div class="toolbar-divider"></div>
+                 <button type="button" class="tool-btn" id="btn-attach-local" title="Adjuntar archivo del PC"><i data-feather="paperclip"></i></button>
+                 <span id="email-adjunto-name" class="text-small text-primary hidden ml-small email-label-adjunto"></span>
+                 <input type="file" id="email-adjunto-local" class="hidden">
              </div>
              <div id="email-contenido" class="nota-editor" contenteditable="true" data-placeholder="Escribe tu mensaje aquí..."></div>
              <div class="modal-footer-left">

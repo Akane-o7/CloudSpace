@@ -707,3 +707,19 @@ h1, h2, h3, h4 {
 .btn-success-bg { background-color: var(--success-color) !important; color: white; }
 .btn-success-bg:hover { opacity: 0.9; }
 .text-success { color: var(--success-color) !important; }
+
+/* --- Componentes del Editor de Correo --- */
+.toolbar-divider {
+    border-left: 0.0625rem solid var(--border-color);
+    margin: 0 0.5rem;
+    height: 1.5rem;
+}
+
+.email-label-adjunto {
+    display: inline-flex;
+    align-items: center;
+    max-width: 9.375rem; /* Equivalente a 150px usando tu sistema */
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

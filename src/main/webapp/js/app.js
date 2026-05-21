@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     viewLogin.classList.add('hidden');
                     if (correo === "admin@cloudspace.com") {
                         viewAdmin.classList.remove('hidden');
-                        cargarDashboardAdmin(); // <--- ESTO ES LO QUE ARRANCA EL PANEL ADMIN
+                        cargarDashboardAdmin(); 
                     } else {
                         configurarInterfazUsuario(correo); refrescarAlmacenamientoGlobal(); cargarRecientes(); cargarMiUnidad(); viewApp.classList.remove('hidden');
                     }
@@ -350,14 +350,71 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (btnDescargarNota) btnDescargarNota.onclick = () => { const editId = btnGuardarNota.dataset.editId; if (editId) descargarArchivo(editId); };
 
-    if (btnNuevo) btnNuevo.onclick = () => { document.getElementById('email-para').value = ''; document.getElementById('email-asunto').value = ''; if(editorEmail) editorEmail.innerHTML = ''; if(modalEmail) modalEmail.classList.remove('hidden'); };
+    // ====================================================
+    // LÓGICA DE ENVÍO DE CORREOS (ACTUALIZADA)
+    // ====================================================
+    const inputEmailAdjunto = document.getElementById('email-adjunto-local');
+    const labelAdjunto = document.getElementById('email-adjunto-name');
+    const btnAttach = document.getElementById('btn-attach-local');
+
+    if (btnNuevo) btnNuevo.onclick = () => { 
+        document.getElementById('email-para').value = ''; 
+        document.getElementById('email-asunto').value = ''; 
+        if(editorEmail) editorEmail.innerHTML = ''; 
+        if(inputEmailAdjunto) inputEmailAdjunto.value = '';
+        if(labelAdjunto) { labelAdjunto.innerText = ''; labelAdjunto.classList.add('hidden'); }
+        if(modalEmail) modalEmail.classList.remove('hidden'); 
+    };
+    
     if (btnCerrarEmail) btnCerrarEmail.onclick = () => modalEmail.classList.add('hidden');
     window.formatearCorreo = (comando) => { document.execCommand(comando, false, null); if(editorEmail) editorEmail.focus(); };
+
+    if (btnAttach && inputEmailAdjunto) {
+        btnAttach.onclick = () => inputEmailAdjunto.click();
+        inputEmailAdjunto.onchange = (e) => {
+            if(e.target.files.length > 0) {
+                labelAdjunto.innerText = e.target.files[0].name;
+                labelAdjunto.classList.remove('hidden');
+            } else {
+                labelAdjunto.classList.add('hidden');
+            }
+        };
+    }
+
     if (btnEnviarEmail) {
         btnEnviarEmail.onclick = () => {
-            const p = document.getElementById('email-para').value.trim(), a = document.getElementById('email-asunto').value.trim(); if (!p || !a) return alert("Rellena destinatario y asunto.");
-            const originalText = btnEnviarEmail.innerHTML; btnEnviarEmail.innerHTML = "<i data-feather='loader' class='icon-small spin'></i> <span class='ml-small'>Enviando...</span>"; renderIcons(); btnEnviarEmail.disabled = true;
-            fetch("/api/email/enviar", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ para: p, asunto: a, cuerpo: editorEmail.innerHTML }) }).then(res => res.json()).then(d => { alert(d.mensaje); modalEmail.classList.add('hidden'); }).finally(() => { btnEnviarEmail.innerHTML = originalText; btnEnviarEmail.disabled = false; renderIcons(); });
+            const p = document.getElementById('email-para').value.trim();
+            const a = document.getElementById('email-asunto').value.trim(); 
+            if (!p || !a) return alert("Rellena destinatario y asunto.");
+
+            const fd = new FormData();
+            fd.append("para", p);
+            fd.append("asunto", a);
+            fd.append("cuerpo", editorEmail.innerHTML);
+            
+            if (inputEmailAdjunto && inputEmailAdjunto.files.length > 0) {
+                fd.append("adjunto", inputEmailAdjunto.files[0]);
+            }
+
+            const originalText = btnEnviarEmail.innerHTML; 
+            btnEnviarEmail.innerHTML = "<i data-feather='loader' class='icon-small spin'></i> <span class='ml-small'>Enviando...</span>"; 
+            renderIcons(); 
+            btnEnviarEmail.disabled = true;
+
+            fetch("/api/email/enviar", { 
+                method: "POST", 
+                body: fd 
+            })
+            .then(res => res.json())
+            .then(d => { 
+                alert(d.mensaje); 
+                if (d.status === 'success') modalEmail.classList.add('hidden'); 
+            })
+            .finally(() => { 
+                btnEnviarEmail.innerHTML = originalText; 
+                btnEnviarEmail.disabled = false; 
+                renderIcons(); 
+            });
         };
     }
 
