@@ -31,24 +31,31 @@ public class ArchivoModel {
     }
 
     /**
-     * Operación "R" (Read): Recupera la lista de todos los archivos guardados.
+     * Operación "R" (Read): Recupera la lista de archivos de un usuario concreto.
      */
-    public List<Archivo> listarArchivos() {
+    public List<Archivo> listarArchivos(String correoUsuario) {
         List<Archivo> lista = new ArrayList<>();
-        String sql = "SELECT * FROM archivos ORDER BY fecha_subida DESC";
+        // Añadimos el filtro WHERE. 
+        // IMPORTANTE: Asegúrate de que la columna en tu BD se llama 'usuario_correo'. Si se llama 'correo' o 'email', cámbialo en esta línea.
+        String sql = "SELECT * FROM archivos WHERE usuario_correo = ? ORDER BY fecha_subida DESC";
         
         try (Connection conn = ConexionBD.getConnection(); 
-             PreparedStatement pstmt = conn.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
-            while (rs.next()) {
-                lista.add(new Archivo(
-                    rs.getInt("id"),
-                    rs.getString("nombre_archivo"),
-                    rs.getString("tipo"),
-                    rs.getString("ruta_servidor"),
-                    rs.getTimestamp("fecha_subida")
-                ));
+            // Pasamos el correo al parámetro de la consulta SQL
+            pstmt.setString(1, correoUsuario);
+            
+            // Ejecutamos la consulta y abrimos el ResultSet
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    lista.add(new Archivo(
+                        rs.getInt("id"),
+                        rs.getString("nombre_archivo"),
+                        rs.getString("tipo"),
+                        rs.getString("ruta_servidor"),
+                        rs.getTimestamp("fecha_subida")
+                    ));
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
