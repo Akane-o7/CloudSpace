@@ -208,12 +208,12 @@ h1, h2, h3, h4 {
 /* --- Topbar --- */
 .topbar { 
     height: 4.5rem; display: flex; align-items: center; 
-    justify-content: flex-end; padding: 0 2rem; 
+    justify-content: space-between; padding: 0 2rem; 
 }
 .search-bar { width: 31.25rem; }
 
 /* --- Avatar y Dropdown de Usuario --- */
-.avatar-container { position: relative; }
+.avatar-container { position: relative; margin-left: auto; }
 .avatar-btn { 
     width: 2.5rem; height: 2.5rem; border-radius: 50%; 
     background-color: var(--primary-color); color: white; 
