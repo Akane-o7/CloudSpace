@@ -208,7 +208,7 @@ h1, h2, h3, h4 {
 /* --- Topbar --- */
 .topbar { 
     height: 4.5rem; display: flex; align-items: center; 
-    justify-content: space-between; padding: 0 2rem; 
+    justify-content: flex-end; padding: 0 2rem; 
 }
 .search-bar { width: 31.25rem; }
 
