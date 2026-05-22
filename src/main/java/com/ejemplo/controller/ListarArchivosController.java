@@ -9,12 +9,11 @@ import com.google.gson.Gson;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet; // Añadimos la importación de la sesión
+import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
-@WebServlet("/api/archivos/listar")
+@WebServlet("/api/archivos/listar") // [cite: 48]
 public class ListarArchivosController extends HttpServlet {
     private final ArchivoModel model = new ArchivoModel();
     private final Gson gson = new Gson();
@@ -24,22 +23,7 @@ public class ListarArchivosController extends HttpServlet {
         res.setContentType("application/json");
         res.setCharacterEncoding("UTF-8");
 
-        // 1. Recuperamos la sesión actual (sin crear una nueva)
-        HttpSession session = req.getSession(false);
-        
-        // 2. Comprobamos que hay sesión y que el atributo del correo existe
-        // IMPORTANTE: Si en tu LoginController guardaste el correo como "usuario", cambia "correo" por "usuario" aquí abajo.
-        if (session != null && session.getAttribute("correo") != null) {
-            
-            String correoUsuario = (String) session.getAttribute("correo");
-            
-            // 3. Le pasamos el correo exacto al modelo
-            List<Archivo> archivos = model.listarArchivos(correoUsuario);
-            res.getWriter().write(this.gson.toJson(archivos));
-            
-        } else {
-            // Si entra alguien sin sesión, le devolvemos una lista vacía por seguridad
-            res.getWriter().write("[]");
-        }
+        List<Archivo> archivos = model.listarArchivos();
+        res.getWriter().write(this.gson.toJson(archivos)); // 
     }
 }
