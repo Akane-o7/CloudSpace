@@ -723,3 +723,129 @@ h1, h2, h3, h4 {
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+
+/* ====================================================
+   12. CORRECCIONES GLOBALES Y RESPONSIVE (MEDIA QUERIES)
+   ==================================================== */
+
+/* Corrección para que las "pastillas" de la landing sean siempre idénticas */
+.landing-actions {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+}
+.landing-actions button {
+    flex: 1; /* Esto fuerza a que ambos botones midan exactamente lo mismo */
+    justify-content: center;
+}
+
+/* --- ADAPTACIÓN PARA MÓVILES (Hasta 48rem / ~768px) --- */
+@media (max-width: 48rem) {
+    
+    /* 1. Landing Page */
+    .landing-hero-content {
+        padding: 2rem 1.5rem;
+        gap: 2rem;
+    }
+    .hero-title { font-size: 2.5rem; }
+    .landing-actions { flex-direction: column; }
+
+    /* 2. Layout Principal: Transformación de la App */
+    .app-layout {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    /* 3. Convertir Sidebar en Menú de Navegación Inferior (App Nativa) */
+    .sidebar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 4.5rem;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        padding: 0.5rem;
+        border-right: none;
+        border-top: 0.0625rem solid var(--border-color);
+        z-index: 100;
+        box-shadow: 0 -0.25rem 0.625rem rgba(0, 0, 0, 0.05);
+    }
+    .sidebar-logo, .storage-widget { display: none !important; }
+    
+    .nav-menu { 
+        display: flex; 
+        flex-direction: row; 
+        width: 100%; 
+        justify-content: space-around; 
+        padding: 0;
+    }
+    .nav-item {
+        flex-direction: column;
+        gap: 0.25rem;
+        padding: 0.5rem;
+        font-size: 0.65rem;
+    }
+    .nav-item .feather { margin: 0; }
+    
+    /* 4. Botón de Acción Flotante (FAB) para "Nuevo" */
+    .btn-new {
+        position: fixed;
+        bottom: 5.5rem;
+        right: 1.5rem;
+        width: 3.5rem;
+        height: 3.5rem;
+        padding: 0;
+        border-radius: var(--radius-full);
+        box-shadow: var(--shadow-lg);
+        z-index: 101;
+    }
+    .btn-new span { display: none; } /* Ocultar el texto, dejar solo el icono '+' */
+    
+    /* 5. Ajustes del Lienzo y Barra Superior */
+    .content-wrapper {
+        margin-bottom: 4.5rem; /* Espacio exacto para que el menú inferior no tape el contenido */
+    }
+    .main-canvas { padding: 1rem; }
+    .topbar { padding: 0 1rem; gap: 1rem; }
+    .search-bar { width: 100%; }
+
+    /* 6. Grillas: Pasar de 4 columnas a 2 */
+    .grid-actions, .metric-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    /* 7. Tablas de Datos (Scroll horizontal sin romper la pantalla) */
+    .data-table-container {
+        overflow-x: auto;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+        margin-left: -1rem; /* Expande la tabla hasta los bordes en móvil */
+        margin-right: -1rem;
+    }
+    .data-table { min-width: 35rem; }
+
+    /* 8. Tarjeta de Perfil */
+    .profile-card { padding: 1.5rem; margin: 1rem 0; }
+    .profile-header { flex-direction: column; text-align: center; gap: 1.5rem; }
+
+    /* 9. Modales Fluidos */
+    .modal-content, .modal-nota-container {
+        width: 90vw;
+        padding: 1.5rem;
+        margin: auto;
+    }
+    .nota-toolbar { flex-wrap: wrap; justify-content: center; gap: 0.75rem; }
+    .email-label-adjunto { max-width: 6rem; }
+}
+
+/* --- ADAPTACIÓN INTERMEDIA PARA TABLETS (Entre 48.0625rem y 64rem) --- */
+@media (min-width: 48.0625rem) and (max-width: 64rem) {
+    .grid-actions, .metric-grid { grid-template-columns: repeat(3, 1fr); }
+    .app-layout { grid-template-columns: 13rem 1fr; }
+    .search-bar { width: 18rem; }
+    .sidebar { padding: 1.5rem 0.75rem; }
+}
