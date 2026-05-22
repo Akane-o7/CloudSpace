@@ -44,11 +44,13 @@ public class EnviarEmailController extends HttpServlet {
                 throw new Exception("Faltan las variables SMTP_USER y SMTP_PASS en Railway.");
             }
 
+            // 3. Configurar el servidor SMTP de Gmail usando SSL (Puerto 465)
             Properties props = new Properties();
             props.put("mail.smtp.host", "smtp.gmail.com");
-            props.put("mail.smtp.port", "587");
+            props.put("mail.smtp.port", "465"); // <--- CAMBIAR A 465
             props.put("mail.smtp.auth", "true");
-            props.put("mail.smtp.starttls.enable", "true");
+            props.put("mail.smtp.socketFactory.port", "465"); // <--- AÑADIR ESTA LÍNEA
+            props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory"); // <--- AÑADIR ESTA LÍNEA
 
             Session session = Session.getInstance(props, new Authenticator() {
                 protected PasswordAuthentication getPasswordAuthentication() {
