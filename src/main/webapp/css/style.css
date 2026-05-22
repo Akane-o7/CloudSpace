@@ -739,6 +739,21 @@ h1, h2, h3, h4 {
     justify-content: center;
 }
 
+/* ====================================================
+   12. CORRECCIONES GLOBALES Y RESPONSIVE (MEDIA QUERIES)
+   ==================================================== */
+
+/* Corrección para que las "pastillas" de la landing sean siempre idénticas */
+.landing-actions {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+}
+.landing-actions button {
+    flex: 1; 
+    justify-content: center;
+}
+
 /* --- ADAPTACIÓN PARA MÓVILES (Hasta 48rem / ~768px) --- */
 @media (max-width: 48rem) {
     
@@ -771,6 +786,7 @@ h1, h2, h3, h4 {
         border-top: 0.0625rem solid var(--border-color);
         z-index: 100;
         box-shadow: 0 -0.25rem 0.625rem rgba(0, 0, 0, 0.05);
+        background-color: var(--bg-color); /* Asegura que el fondo no sea transparente */
     }
     .sidebar-logo, .storage-widget { display: none !important; }
     
@@ -789,23 +805,30 @@ h1, h2, h3, h4 {
     }
     .nav-item .feather { margin: 0; }
     
-    /* 4. Botón de Acción Flotante (FAB) para "Nuevo" */
+    /* 4. Botón Flotante transformado en "Pastilla" para que quepa el texto */
     .btn-new {
         position: fixed;
         bottom: 5.5rem;
-        right: 1.5rem;
-        width: 3.5rem;
-        height: 3.5rem;
-        padding: 0;
-        border-radius: var(--radius-full);
-        box-shadow: var(--shadow-lg);
+        right: 1rem;
+        width: auto !important; 
+        height: auto !important;
+        padding: 0.75rem 1.25rem !important; 
+        border-radius: 2rem !important; 
+        display: flex;
+        align-items: center;
+        gap: 0.5rem; 
         z-index: 101;
+        box-shadow: var(--shadow-lg);
     }
-    .btn-new span { display: none; } /* Ocultar el texto, dejar solo el icono '+' */
+    .btn-new span { 
+        display: inline-block !important; 
+        font-size: 0.9rem;
+        white-space: nowrap;
+    }
     
     /* 5. Ajustes del Lienzo y Barra Superior */
     .content-wrapper {
-        margin-bottom: 4.5rem; /* Espacio exacto para que el menú inferior no tape el contenido */
+        margin-bottom: 4.5rem; 
     }
     .main-canvas { padding: 1rem; }
     .topbar { padding: 0 1rem; gap: 1rem; }
@@ -817,16 +840,44 @@ h1, h2, h3, h4 {
         gap: 1rem;
     }
 
-    /* 7. Tablas de Datos (Scroll horizontal sin romper la pantalla) */
+    /* 7. Ajuste total de Tablas (Mi Unidad y Directorio de Cuentas) al ancho de pantalla */
     .data-table-container {
-        overflow-x: auto;
+        width: 100%;
+        overflow: hidden; 
+        margin: 0;
+        padding: 0;
         border-radius: 0;
         border-left: none;
         border-right: none;
-        margin-left: -1rem; /* Expande la tabla hasta los bordes en móvil */
-        margin-right: -1rem;
     }
-    .data-table { min-width: 35rem; }
+    
+    .data-table { 
+        width: 100%;
+        min-width: 100% !important; 
+        table-layout: fixed; 
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 0.75rem 0.25rem; 
+        font-size: 0.75rem; 
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis; 
+    }
+
+    /* Evitar que la columna de los Checkbox se deforme */
+    .data-table th:first-child,
+    .data-table td:first-child {
+        width: 2.5rem; 
+        text-align: center;
+    }
+    
+    /* Le damos prioridad de espacio a la columna del Nombre/Correo (suele ser la 2ª) */
+    .data-table th:nth-child(2),
+    .data-table td:nth-child(2) {
+        width: 45%; 
+    }
 
     /* 8. Tarjeta de Perfil */
     .profile-card { padding: 1.5rem; margin: 1rem 0; }
